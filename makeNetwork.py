@@ -2,12 +2,25 @@ import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
 import networkx as nx
+import numpy as np
+from skbio.stats.composition import ilr
+from helper import multiplicativeReplacementOfZeros
+
+
 
 
 df = pd.read_csv("withYone.csv")
 df=df.drop("summoner",axis=1)
+minCPfilter  = 	21600 #mastery 5 
+df= df[df.max(axis=1)>minCPfilter] #remove players with all champs below some mastery level
+replacement_val = df.values[df.values>0].min() #minimum nonzero mastery points 
+df = df.apply(lambda x :multiplicativeReplacementOfZeros(x,inputeVal=replacement_val),axis=1) 
 df = df.div(df.sum(axis=1), axis=0) # normalize each players stats by sum of row, so get percentage mastery
-corr = df.corr()
+ilrVals=ilr(df.values)
+corrCoefOfIlr = np.corrcoef(ilrVals)
+
+corrCoefDf = pd.DataFrame(data=corrCoefOfIlr,index=df.columns,columns=df.columns)
+
 # corr=corr[corr.loc["Yasuo"]>0.95]
 # plt.scatter(corr.index,corr["Yasuo"])
 # plt.xticks(rotation=45)
