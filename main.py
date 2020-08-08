@@ -41,13 +41,20 @@ cass.set_default_region("EUW")
 #use previously collected data to avoid duplicates
 dfSoFar = pd.read_csv("mainData.csv")
 seenSummoners=set(dfSoFar["summoner"])
-seedName = dfSoFar["summoner"].tolist()[-1]
 
+seedName = dfSoFar["summoner"].iloc[-1]
 
 summoner_seed = cass.get_summoner(name=seedName,region="EUW")
 
+
+
 #sort alphabetically for column labels
-columnLabels = [cm.champion.name for cm in summoner_seed.champion_masteries]
+try:
+    columnLabels = [cm.champion.name for cm in summoner_seed.champion_masteries]
+except: 
+    seedName = dfSoFar["summoner"].iloc[-2]
+    summoner_seed = cass.get_summoner(name=seedName,region="EUW")
+    columnLabels = [cm.champion.name for cm in summoner_seed.champion_masteries]
 columnLabels = sorted(columnLabels)
 columnLabels.insert(0,"summoner")
 
@@ -61,8 +68,8 @@ with open('championMasteries2.csv', mode='w',encoding="utf-8",newline='') as dat
     summoner=summoner_seed
     while True:
         print(summoner.name)
-      
-        nextMatchSeed= random.randint(0,len(summoner.match_history))
+        
+        nextMatchSeed= 1
         nextParticipantSeed = random.randint(0,5)
         for index,match  in enumerate(summoner.match_history):
 
@@ -82,8 +89,11 @@ with open('championMasteries2.csv', mode='w',encoding="utf-8",newline='') as dat
             
                 if not summonerFromHistName in seenSummoners:  #make sure not taking duplicate summoners
                     seenSummoners.add(summonerFromHistName)
-                    sortedMasteries= sorted(summonerFromHist.champion_masteries,key = lambda x: x.champion.name)
-                    sortedPoints = [cm.points for cm in sortedMasteries]
+                    try:
+                        sortedMasteries= sorted(summonerFromHist.champion_masteries,key = lambda x: x.champion.name)
+                        sortedPoints = [cm.points for cm in sortedMasteries]
+                    except:
+                        continue
                     csvRow = sortedPoints
                     csvRow.insert(0,summonerFromHistName)
                     try:

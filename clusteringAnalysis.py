@@ -8,7 +8,7 @@ import matplotlib.pyplot as plt
 from scipy.cluster.hierarchy import dendrogram, linkage
 from sklearn.cluster import AgglomerativeClustering
 import numpy as np
-
+from collections import Counter
 tqdm.pandas()
 df=pd.read_csv("mainData.csv")
 
@@ -29,11 +29,15 @@ scaled_features = scaler.fit_transform(df)
 kmeans = KMeans(init="random",n_clusters=5,n_init=10,max_iter=300,random_state=42)
 kmeans.fit(scaled_features)
 centers = kmeans.cluster_centers_
-
+plt.pie(Counter(kmeans.labels_).values())
+plt.show()
 for i in range(centers.shape[0]):
     cluster = centers[i,:]
-    plt.scatter([x[1] for x in zip(cluster, df.columns) if x[0]> cluster.mean()],[x for x in  cluster if x> cluster.mean()])
-    plt.xticks(rotation=90)
+    significantCorrelations = zip([x[1] for x in zip(cluster, df.columns) if x[0]> cluster.mean()],[x for x in  cluster if x> cluster.mean()])
+    sortedSignificantCorrelations = sorted(list(significantCorrelations),key = lambda x : x[1])
+    x , y = list(zip(*sortedSignificantCorrelations))
+    plt.bar(x,y)
+    plt.xticks(rotation=45)
     plt.show()
 
 #Hierarchical clustering
@@ -68,11 +72,11 @@ def plot_dendrogram(model, **kwargs):
 
 
 
-hierarchicalModel = AgglomerativeClustering(n_clusters=None, affinity='euclidean', linkage='ward',distance_threshold=1)
-hierarchicalLables = hierarchicalModel.fit_predict(scaled_features)
-plt.title('Hierarchical Clustering Dendrogram')
-# plot the top three levels of the dendrogram
-plot_dendrogram(hierarchicalModel, truncate_mode='level', p=3)
-plt.xlabel("Number of points in node (or index of point if no parenthesis).")
-plt.show()
+# hierarchicalModel = AgglomerativeClustering(n_clusters=None, affinity='euclidean', linkage='ward',distance_threshold=1)
+# hierarchicalLables = hierarchicalModel.fit_predict(scaled_features)
+# plt.title('Hierarchical Clustering Dendrogram')
+# # plot the top three levels of the dendrogram
+# plot_dendrogram(hierarchicalModel, truncate_mode='level', p=3)
+# plt.xlabel("Number of points in node (or index of point if no parenthesis).")
+# plt.show()
 print("done")

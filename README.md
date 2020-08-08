@@ -11,4 +11,4 @@ http://scikit-bio.org/docs/0.5.0/generated/generated/skbio.stats.composition.ilr
 
 
 
-https://mran.microsoft.com/snapshot/2016-11-19/web/packages/propr/vignettes/introduction.html
+https://mran.microsoft.com/snapshot/2016-11-19/web/packages/propr/vignettes/introduction.htmlsignificantCorrelations
