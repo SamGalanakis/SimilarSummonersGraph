@@ -27,9 +27,7 @@ df = df.progress_apply(lambda x :multiplicativeReplacementOfZeros(x,inputeVal=re
 df = df.div(df.sum(axis=1), axis=0) # normalize each players stats by sum of row, so get percentage mastery
 
 clrVals = clr(df.values)
-# basis, nodes = balance_basis(tree)
-ilrVals=ilr(df.values)
-basis = clr_inv(_gram_schmidt_basis(df.values.shape[-1]))
+
 
 
 
@@ -58,7 +56,9 @@ def rhoMetric(npArray):
 
 
 rhoDf = pd.DataFrame(data=rhoMetric(df.values),index=df.columns,columns=df.columns)
+rhoDf.to_csv("rhoDf.csv")
 phiDf= pd.DataFrame(data=phiMetric(df.values),index=df.columns,columns=df.columns)
+phiDf.to_csv("phiDf.csv")
 print("done")
 
 
