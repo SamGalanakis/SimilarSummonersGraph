@@ -10,7 +10,16 @@ from pyvis.network import Network
 
 nodeSizes = df.apply(sum,axis=0)
 nodeSizes= nodeSizes.div(nodeSizes.max())
+
+corrType = "phi"
 rhoDf = pd.read_csv("rhoDf.csv",index_col=[0])
+phiDf = pd.read_csv("phiDf.csv",index_col=[0])
+
+if corrType == "phi":
+    correlationMatrix = phiDf
+else : 
+  correlationMatrix = rhoDf
+
 
 colorList = ["blue","red","green","yellow","white"]
 
@@ -30,14 +39,25 @@ for node in G.nodes():
     colorMap.append(colorChampion(centers,node,rhoDf.columns,colorList))
 for index,node1 in enumerate(G.nodes()):
     for node2 in G.nodes():
-        if node1==node2 or node2 in list(G.nodes)[0:index]:
-            continue
-        pairCorr= rhoDf.loc[node1,node2]
-        minCorr = rhoDf[node1].sort_values()[-6]
-        if pairCorr > minCorr:
-            normCorr = pairCorr
-            normCorr= (pairCorr-minCorr)/(1-minCorr)
-            G.add_edge(node1,node2,weight=normCorr)
+      if corrType == "rho":
+          if node1==node2 or node2 in list(G.nodes)[0:index]:
+              continue
+          pairCorr= correlationMatrix.loc[node1,node2]
+          minCorr = correlationMatrix[node1].sort_values()[-8]
+          if pairCorr >= minCorr:
+      
+              normCorr= (pairCorr-minCorr)/(1-minCorr)
+              G.add_edge(node1,node2,weight=normCorr)
+
+      elif corrType=="phi":
+          if node1==node2 or node2 in list(G.nodes)[0:index]:
+              continue
+          pairCorr= correlationMatrix.loc[node1,node2]
+          minCorr = correlationMatrix[node1].sort_values()[8]
+          if pairCorr <= minCorr:
+              
+              normCorr= (minCorr - pairCorr)/minCorr
+              G.add_edge(node1,node2,weight=normCorr)
 
 pos = nx.spring_layout(G,iterations=30)
 edge_widths = [w for (*edge, w) in G.edges.data('weight')]

@@ -41,6 +41,11 @@ def phiMetric(npArray):
             columnI = clrVals[:,i]
             columnJ = clrVals[:,j]
             tempArray[i,j] = (columnI-columnJ).var()/columnI.var()
+    
+    #make symmetric
+    
+    i_lower = np.tril_indices(tempArray.shape[0])
+    tempArray[i_lower] =tempArray.T[i_lower]
     return tempArray
 
 def rhoMetric(npArray):
@@ -52,6 +57,9 @@ def rhoMetric(npArray):
             columnI = clrVals[:,i]
             columnJ = clrVals[:,j]
             tempArray[i,j] = 1-(columnI-columnJ).var()/(columnI.var()+columnJ.var())
+
+
+  
     return tempArray
 
 

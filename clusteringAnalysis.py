@@ -29,17 +29,33 @@ scaled_features = scaler.fit_transform(df)
 kmeans = KMeans(init="random",n_clusters=5,n_init=10,max_iter=300,random_state=42)
 kmeans.fit(scaled_features)
 centers = kmeans.cluster_centers_
-plt.pie(Counter(kmeans.labels_).values())
-plt.show()
+
+clusterLabels=[]
 for i in range(centers.shape[0]):
     cluster = centers[i,:]
     significantCorrelations = zip([x[1] for x in zip(cluster, df.columns) if x[0]> cluster.mean()],[x for x in  cluster if x> cluster.mean()])
     sortedSignificantCorrelations = sorted(list(significantCorrelations),key = lambda x : x[1])
+    sortedSignificantCorrelations = sortedSignificantCorrelations[-35:] # don't take last ones, too much too graph and low correlations
     x , y = list(zip(*sortedSignificantCorrelations))
+    if "Elise" in x:
+        clusterLabels.append("Jungle")
+    elif "Ashe" in x:
+        clusterLabels.append("Marksman")
+    elif "Azir" in x:
+        clusterLabels.append("Mid")
+    elif "Malphite" in x:
+        clusterLabels.append("top")
+    elif "Soraka" in x:
+        clusterLabels.append("Support")
     plt.bar(x,y)
     plt.xticks(rotation=45)
+    plt.title(clusterLabels[-1])
     plt.show()
 
+#pyplot
+patches, texts = plt.pie([x[1] for x in sorted(Counter(kmeans.labels_).items(),key = lambda x: x[0])],  startangle=90)
+plt.legend( patches, clusterLabels, loc="best")
+plt.show()
 #Hierarchical clustering
 
 def plot_dendrogram(model, **kwargs):
