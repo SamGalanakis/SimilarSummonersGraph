@@ -1,0 +1,67 @@
+arrow==0.15.8
+backcall==0.2.0
+biom-format==2.1.8
+CacheControl==0.12.6
+cassiopeia==4.0.13
+certifi==2020.6.20
+chardet==3.0.4
+click==7.1.2
+colorama==0.4.3
+cycler==0.10.0
+Cython==0.29.21
+datapipelines==1.0.7
+decorator==4.4.2
+future==0.18.2
+gneiss==0.4.6
+h5py==2.10.0
+hdmedians==0.13
+idna==2.10
+importlib-metadata==1.7.0
+ipython==7.17.0
+ipython-genutils==0.2.0
+jedi==0.17.2
+Jinja2==2.11.2
+joblib @ file:///tmp/build/80754af9/joblib_1594236160679/work
+jsonpickle==1.4.1
+kiwisolver==1.2.0
+lockfile==0.12.2
+lxml==4.5.2
+MarkupSafe==1.1.1
+matplotlib @ file:///C:/ci/matplotlib-base_1592837548929/work
+merakicommons==1.0.9
+mkl-fft==1.1.0
+mkl-random==1.1.1
+mkl-service==2.3.0
+msgpack==1.0.0
+natsort==7.0.1
+networkx @ file:///tmp/build/80754af9/networkx_1594377231366/work
+nose==1.3.7
+numpy==1.18.5
+pandas @ file:///C:/ci/pandas_1592833613419/work
+parso==0.7.1
+patsy==0.5.1
+pickleshare==0.7.5
+Pillow==7.2.0
+prompt-toolkit==3.0.5
+Pygments==2.6.1
+pyparsing==2.4.7
+python-dateutil==2.8.1
+python-Levenshtein==0.12.0
+pytz==2020.1
+pyvis==0.1.8.2
+requests==2.24.0
+scikit-bio==0.5.6
+scikit-learn @ file:///C:/ci/scikit-learn_1592853510272/work
+scipy==1.5.2
+seaborn==0.10.1
+sip==4.19.13
+six==1.15.0
+statsmodels==0.11.1
+threadpoolctl @ file:///tmp/tmp9twdgx9k/threadpoolctl-2.1.0-py3-none-any.whl
+tornado==6.0.4
+tqdm @ file:///tmp/build/80754af9/tqdm_1593446365756/work
+traitlets==4.3.3
+urllib3==1.25.10
+wcwidth==0.2.5
+wincertstore==0.2
+zipp==3.1.0

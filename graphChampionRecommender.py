@@ -58,7 +58,7 @@ if __name__ == "__main__":
             raise Exception(errorText)
     
 
-
+    #get champions in input and on shortest paths to recommended
     recommendation = recommendChampion(championList,G)
     relevantNodes = set()
     for champ in championList:
@@ -67,7 +67,7 @@ if __name__ == "__main__":
 
 
 
-
+    #filter out irrelevant nodes
 
     g.nodes = [x for x in g.nodes if x["id"] in relevantNodes]
   
