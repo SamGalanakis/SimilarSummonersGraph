@@ -15,7 +15,7 @@ import scipy.cluster.hierarchy as sch
 import seaborn as sns
 tqdm.pandas()
 
-makeGraphs = True # set to true to produce graphs
+makeGraphs = True# set to true to produce graphs
 sns.set_style("darkgrid")
 
 df=pd.read_csv("data//processedDf.csv",index_col=[0])

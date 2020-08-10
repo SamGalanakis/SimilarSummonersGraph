@@ -7,9 +7,11 @@ from skbio.stats.composition import ilr
 from helper import multiplicativeReplacementOfZeros
 from clusteringAnalysis import centers, df
 from pyvis.network import Network
+import pickle 
+
 
 nodeSizes = df.apply(sum,axis=0)
-nodeSizes= nodeSizes.div(nodeSizes.max())
+nodeSizes= nodeSizes.div(nodeSizes.max())  #nodesize based on total mastery point percentage sum
 
 corrType = "rho" # which metric to use for connection of nodes/champions ("rho" or "phi")
 rhoDf = pd.read_csv("data//rhoDf.csv",index_col=[0])
@@ -49,7 +51,7 @@ for index,node1 in enumerate(G.nodes()):
           if pairCorr >= minCorr:
       
               normCorr= (pairCorr-minCorr)/(1-minCorr)
-              G.add_edge(node1,node2,weight=normCorr)
+              G.add_edge(node1,node2,weight=normCorr,cost=1-normCorr)  #weight is connection strength/width, cost is for recommender distance
   #phi in [0,inf] more proportional the closer to 0
       elif corrType=="phi":
           if node1==node2 or node2 in list(G.nodes)[0:index]:
@@ -59,11 +61,15 @@ for index,node1 in enumerate(G.nodes()):
           if pairCorr <= minCorr:
               
               normCorr= (minCorr - pairCorr)/minCorr
-              G.add_edge(node1,node2,weight=normCorr)
+              G.add_edge(node1,node2,weight=normCorr,cost=1-normCorr)
 
 pos = nx.spring_layout(G,iterations=30)
 edge_widths = [w for (*edge, w) in G.edges.data('weight')]
 label_dict= {key:key for key in G.nodes}
+
+#Pickle save graph for recommender
+nx.write_gpickle(G, "network.gpickle")
+#Draw graph
 edge_labels=nx.draw_networkx_labels(G,pos,edge_labels=label_dict)
 nx.draw(G, pos, width=edge_widths,width_labels=True,node_color=colorMap)
 plt.show()
@@ -80,7 +86,7 @@ minEdgeWidth=3
 for index, node in enumerate(g.nodes):
     node["group"] =  colorChampion(centers,node["id"],rhoDf.columns,colorList)
     title = node["id"]
-    node["title"] = f"<h3> {title} </h3>"
+    node["title"] = f"<h3> {title} </h3>" #hover title
     node["size"] = max(min( nodeSizes[node["id"]] * maxNodeSize,maxNodeSize),minNodeSize)
 for index , edge in enumerate(g.edges):
     edge["width"] =   max(min(edge["weight"]*maxEdgeWidth,maxEdgeWidth),minEdgeWidth)
@@ -115,5 +121,9 @@ g.set_options(options="""
       """)
 # g.show_buttons(filter_=True)
 g.show("network.html")
+
+with  open("data//pyvisNetwork.pickle", "wb") as f:
+  pickle.dump(g, f)
+
 
 
