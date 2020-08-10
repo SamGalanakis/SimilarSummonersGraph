@@ -8,26 +8,7 @@ with open("api_key.txt","r") as f:
     api_key=f.read()
 
 
-class matchData:
-    def __init__(self,match):
-        self.match=match
-        self.participants = self.match.participants
-        self.summonerData=[summonerData(x.summoner) for x in self.participants]
 
-
-class summonerData:
-    cachedSummonerNames=set()
-    def __init__(self,summoner):
-        if not summoner.name in cachedSummonerNames:
-            cachedSummonerNames.add(summoner.name)
-        self.summoner=summoner
-        self.league_entry= cass.get_league_entries(self.summoner)[0].to_dict()
-        assert(self.league_entry)["queue"]=="RANKED_SOLO_5x5"
-        self.winrate = self.league_entry["wins"]/(self.league_entry["wins"]+self.league_entry["losses"])
-        self.hotstreak=self.league_entry["hotstreak"]
-        self.tier=self.league_entry["tier"]
-        self.division=self.league_entry["division"]
-        self.championMasteries = [cm.points for cm in self.summoner.champion_masteries]
 
 #settings
 
@@ -60,7 +41,7 @@ columnLabels.insert(0,"summoner")
 
 
 
-with open('lastCollection.csv', mode='w',encoding="utf-8",newline='') as dataCSV:
+with open('data//lastCollection.csv', mode='w',encoding="utf-8",newline='') as dataCSV:
     dataCSVWriter = csv.writer(dataCSV, delimiter=',', quotechar='"', quoting=csv.QUOTE_MINIMAL)
     dataCSVWriter.writerow(columnLabels)
 
