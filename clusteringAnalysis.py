@@ -1,98 +1,112 @@
 import pandas as pd
 from skbio.stats.composition import ilr, ilr_inv, clr, _gram_schmidt_basis,clr_inv,closure
-from sklearn.cluster import KMeans
+from sklearn.cluster import KMeans, spectral_clustering
 from sklearn.preprocessing import StandardScaler
 from tqdm import tqdm
 from helper import multiplicativeReplacementOfZeros
 import matplotlib.pyplot as plt
 from scipy.cluster.hierarchy import dendrogram, linkage
-from sklearn.cluster import AgglomerativeClustering
+from sklearn.cluster import AgglomerativeClustering, SpectralClustering, FeatureAgglomeration
 import numpy as np
 from collections import Counter
+from scipy.cluster.hierarchy import ward, fcluster, cophenet
+from scipy.spatial.distance import pdist
+import scipy.cluster.hierarchy as sch
+from matplotlib import colors
+import seaborn as sns
 tqdm.pandas()
-df=pd.read_csv("mainData.csv")
 
-df=df.drop("summoner",axis=1)
-minCPfilter  = 	21600 #mastery 5 
-df= df[df.max(axis=1)>minCPfilter] #remove players with all champs below some mastery level
-replacement_val = df.values[df.values>0].min() #minimum nonzero mastery points 
-df = df.progress_apply(lambda x :multiplicativeReplacementOfZeros(x,inputeVal=replacement_val),axis=1) 
-df = df.div(df.sum(axis=1), axis=0) # normalize each players stats by sum of row, so get percentage mastery
+sns.set_style("darkgrid")
+df=pd.read_csv("processedDf.csv",index_col=[0])
+
+rhoDf = pd.read_csv("rhoDf.csv",index_col=[0])
 
 clrVals = clr(df.values)
 
 
 scaler = StandardScaler()
-scaled_features = scaler.fit_transform(df)
+# scaled_features = scaler.fit_transform(df)
+scaled_features = scaler.fit_transform(df.values)
+
+
+
+# featureKMeans = FeatureAgglomeration(distance_threshold=0, n_clusters=None)
+# featureKMeans.fit(scaled_features)
+# centers = featureKMeans.cluster_centers_
+
 
 #Kmeans clustering
-kmeans = KMeans(init="random",n_clusters=5,n_init=10,max_iter=300,random_state=42)
+kmeans = KMeans(init="random",n_clusters=5,n_init=20,max_iter=1000,random_state=42)
+# kmeans = SpectralClustering(n_clusters=5,random_state=4, affinity = rhoDf.values)
 kmeans.fit(scaled_features)
+
 centers = kmeans.cluster_centers_
+makeGraphs = False
+
+
 
 clusterLabels=[]
 for i in range(centers.shape[0]):
     cluster = centers[i,:]
     significantCorrelations = zip([x[1] for x in zip(cluster, df.columns) if x[0]> cluster.mean()],[x for x in  cluster if x> cluster.mean()])
     sortedSignificantCorrelations = sorted(list(significantCorrelations),key = lambda x : x[1])
-    sortedSignificantCorrelations = sortedSignificantCorrelations[-35:] # don't take last ones, too much too graph and low correlations
+    sortedSignificantCorrelations = sortedSignificantCorrelations[-20:] # don't take last ones, too much too graph and low correlations
     x , y = list(zip(*sortedSignificantCorrelations))
-    if "Elise" in x:
-        clusterLabels.append("Jungle")
-    elif "Ashe" in x:
-        clusterLabels.append("Marksman")
-    elif "Azir" in x:
-        clusterLabels.append("Mid")
-    elif "Malphite" in x:
-        clusterLabels.append("top")
-    elif "Soraka" in x:
-        clusterLabels.append("Support")
-    plt.bar(x,y)
-    plt.xticks(rotation=45)
-    plt.title(clusterLabels[-1])
-    plt.show()
+
+    if makeGraphs:
+        plt.bar(x,y)
+        plt.xticks(rotation=45)
+        # plt.title(clusterLabels[-1])
+        plt.show()
+        clusterLabels.append(input("EnterCategorizationOfCluster: "))
 
 #pyplot
-patches, texts = plt.pie([x[1] for x in sorted(Counter(kmeans.labels_).items(),key = lambda x: x[0])],  startangle=90)
-plt.legend( patches, clusterLabels, loc="best")
-plt.show()
-#Hierarchical clustering
-
-def plot_dendrogram(model, **kwargs):
-    # Create linkage matrix and then plot the dendrogram
-
-    # create the counts of samples under each node
-    counts = np.zeros(model.children_.shape[0])
-    n_samples = len(model.labels_)
-    for i, merge in enumerate(model.children_):
-        current_count = 0
-        for child_idx in merge:
-            if child_idx < n_samples:
-                current_count += 1  # leaf node
-            else:
-                current_count += counts[child_idx - n_samples]
-        counts[i] = current_count
-
-    linkage_matrix = np.column_stack([model.children_, model.distances_,
-                                      counts]).astype(float)
-
-    # Plot the corresponding dendrogram
-    dendrogram(linkage_matrix, **kwargs)
+if makeGraphs:
+    patches, texts = plt.pie([x[1] for x in sorted(Counter(kmeans.labels_).items(),key = lambda x: x[0])],  startangle=90)
+    plt.legend( patches, clusterLabels, loc="best")
+    plt.show()
 
 
 
+if makeGraphs:
+
+    scaler = StandardScaler()
+    scaled_features = scaler.fit_transform(clrVals.T)
+
+
+    linked = linkage(scaled_features, 'ward')
+
+    labels = df.columns.tolist()
+    p = len(labels)
+
+    plt.figure(figsize=(14,6))
+    plt.title('Hierarchical Clustering Champion Dendrogram', fontsize=20)
+    plt.xlabel('Champions', fontsize=16)
+    plt.ylabel('Distance', fontsize=16)
+
+    # call dendrogram to get the returned dictionary 
+    # (plotting parameters can be ignored at this point)
+    R = dendrogram(
+                    linked,
+                    no_plot=True,
+                    )
+
+    print("values passed to leaf_label_func\nleaves : ", R["leaves"])
+
+    # create a label dictionary
+    temp = {R["leaves"][ii]: labels[R["leaves"][ii]] for ii in range(len(R["leaves"]))}
+    def llf(xx):
+        return temp[xx]
 
 
 
 
-
-
-
-# hierarchicalModel = AgglomerativeClustering(n_clusters=None, affinity='euclidean', linkage='ward',distance_threshold=1)
-# hierarchicalLables = hierarchicalModel.fit_predict(scaled_features)
-# plt.title('Hierarchical Clustering Dendrogram')
-# # plot the top three levels of the dendrogram
-# plot_dendrogram(hierarchicalModel, truncate_mode='level', p=3)
-# plt.xlabel("Number of points in node (or index of point if no parenthesis).")
-# plt.show()
-print("done")
+    dendrogram(
+                linked, 
+                color_threshold=0.3*max(linked[:,2]), # to get individual colouring of lower trees but not all the way down
+                leaf_label_func=llf,
+                leaf_rotation=90.,
+                leaf_font_size=8.,
+                show_contracted=True,  # to get a distribution impression in truncated branches
+                )
+    plt.show()

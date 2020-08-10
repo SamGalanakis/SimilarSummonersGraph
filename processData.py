@@ -32,6 +32,7 @@ clrVals = clr(df.values)
 
 
 
+
 def phiMetric(npArray):
     nColumns=npArray.shape[-1]
     tempArray = np.zeros(shape=(nColumns,nColumns))
@@ -62,7 +63,7 @@ def rhoMetric(npArray):
   
     return tempArray
 
-
+df.to_csv("processedDf.csv")
 rhoDf = pd.DataFrame(data=rhoMetric(df.values),index=df.columns,columns=df.columns)
 rhoDf.to_csv("rhoDf.csv")
 phiDf= pd.DataFrame(data=phiMetric(df.values),index=df.columns,columns=df.columns)

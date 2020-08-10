@@ -11,7 +11,7 @@ from pyvis.network import Network
 nodeSizes = df.apply(sum,axis=0)
 nodeSizes= nodeSizes.div(nodeSizes.max())
 
-corrType = "phi"
+corrType = "rho"
 rhoDf = pd.read_csv("rhoDf.csv",index_col=[0])
 phiDf = pd.read_csv("phiDf.csv",index_col=[0])
 
@@ -40,20 +40,21 @@ for node in G.nodes():
 for index,node1 in enumerate(G.nodes()):
     for node2 in G.nodes():
       if corrType == "rho":
-          if node1==node2 or node2 in list(G.nodes)[0:index]:
+          if node1==node2:# node2 in list(G.nodes)[0:index]:
               continue
           pairCorr= correlationMatrix.loc[node1,node2]
-          minCorr = correlationMatrix[node1].sort_values()[-8]
+          #essential works like normal correlation coefficient rho in [-1,1] 
+          minCorr = correlationMatrix[node1].sort_values()[-6] #number of connections to be made (-1 because of self)
           if pairCorr >= minCorr:
       
               normCorr= (pairCorr-minCorr)/(1-minCorr)
               G.add_edge(node1,node2,weight=normCorr)
-
+  #phi in [0,inf] more proportional the closer to 0
       elif corrType=="phi":
           if node1==node2 or node2 in list(G.nodes)[0:index]:
               continue
-          pairCorr= correlationMatrix.loc[node1,node2]
-          minCorr = correlationMatrix[node1].sort_values()[8]
+          pairCorr= correlationMatrix.loc[node1,node2]  
+          minCorr = correlationMatrix[node1].sort_values()[6] #number of connections to be made (-1 because of self)
           if pairCorr <= minCorr:
               
               normCorr= (minCorr - pairCorr)/minCorr
