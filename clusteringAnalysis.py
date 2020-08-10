@@ -12,20 +12,20 @@ from collections import Counter
 from scipy.cluster.hierarchy import ward, fcluster, cophenet
 from scipy.spatial.distance import pdist
 import scipy.cluster.hierarchy as sch
-from matplotlib import colors
 import seaborn as sns
 tqdm.pandas()
 
+makeGraphs = True # set to true to produce graphs
 sns.set_style("darkgrid")
+
 df=pd.read_csv("data//processedDf.csv",index_col=[0])
 
 rhoDf = pd.read_csv("data//rhoDf.csv",index_col=[0])
 
 clrVals = clr(df.values)
 
-
+#scale features 
 scaler = StandardScaler()
-# scaled_features = scaler.fit_transform(df)
 scaled_features = scaler.fit_transform(df.values)
 
 
@@ -37,11 +37,10 @@ scaled_features = scaler.fit_transform(df.values)
 
 #Kmeans clustering
 kmeans = KMeans(init="random",n_clusters=5,n_init=20,max_iter=1000,random_state=42)
-# kmeans = SpectralClustering(n_clusters=5,random_state=4, affinity = rhoDf.values)
 kmeans.fit(scaled_features)
 
 centers = kmeans.cluster_centers_
-makeGraphs = False
+
 
 
 
@@ -56,7 +55,6 @@ for i in range(centers.shape[0]):
     if makeGraphs:
         plt.bar(x,y)
         plt.xticks(rotation=45)
-        # plt.title(clusterLabels[-1])
         plt.show()
         clusterLabels.append(input("EnterCategorizationOfCluster: "))
 
@@ -68,8 +66,8 @@ if makeGraphs:
 
 
 
-if makeGraphs:
 
+    #Make dendrogram
     scaler = StandardScaler()
     scaled_features = scaler.fit_transform(clrVals.T)
 
@@ -77,7 +75,6 @@ if makeGraphs:
     linked = linkage(scaled_features, 'ward')
 
     labels = df.columns.tolist()
-    p = len(labels)
 
     plt.figure(figsize=(14,6))
     plt.title('Hierarchical Clustering Champion Dendrogram', fontsize=20)

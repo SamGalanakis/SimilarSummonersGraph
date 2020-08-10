@@ -2,7 +2,7 @@
 api_key.txt
 .vscode/
 old_data/
-
+data/processedDf.csv
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]

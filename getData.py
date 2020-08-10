@@ -21,9 +21,9 @@ cass.set_default_region("EUW")
 
 #use previously collected data to avoid duplicates
 dfSoFar = pd.read_csv("mainData.csv")
-seenSummoners=set(dfSoFar["summoner"])
+seenSummoners=set(dfSoFar["summoner"]) # Use set for efficient set membership checking of summoner names, significantly faster than list
 
-seedName = dfSoFar["summoner"].iloc[-1]
+seedName = dfSoFar["summoner"].iloc[-1]   
 
 summoner_seed = cass.get_summoner(name=seedName,region="EUW")
 
@@ -83,4 +83,4 @@ with open('data//lastCollection.csv', mode='w',encoding="utf-8",newline='') as d
                         print(f"Failed to write to csv for summoner {summonerFromHistName}") #rare api call fails for some summoners
             summoner = participants[-1].summoner     #get summoner for next run
                    
-print("done")
+

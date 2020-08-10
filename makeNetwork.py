@@ -11,9 +11,9 @@ from pyvis.network import Network
 nodeSizes = df.apply(sum,axis=0)
 nodeSizes= nodeSizes.div(nodeSizes.max())
 
-corrType = "rho"
-rhoDf = pd.read_csv("rhoDf.csv",index_col=[0])
-phiDf = pd.read_csv("phiDf.csv",index_col=[0])
+corrType = "rho" # which metric to use for connection of nodes/champions ("rho" or "phi")
+rhoDf = pd.read_csv("data//rhoDf.csv",index_col=[0])
+phiDf = pd.read_csv("data//phiDf.csv",index_col=[0])
 
 if corrType == "phi":
     correlationMatrix = phiDf
@@ -24,6 +24,7 @@ else :
 colorList = ["blue","red","green","yellow","white"]
 
 def colorChampion(centers,champion,columnList,colorList):
+    '''Apply color to node  based on prevalence in center of cluster by argmaxing'''
     if type(columnList)!=list:
         columnList=columnList.tolist()
     championIndex= columnList.index(champion)
@@ -116,4 +117,3 @@ g.set_options(options="""
 g.show("network.html")
 
 
-print("done")

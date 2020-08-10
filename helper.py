@@ -1,7 +1,7 @@
 import numpy as np
 
 
-#turns oout scikit-bio has it's own implementation of this : multiplicative_replacement
+#turns out scikit-bio has it's own implementation of this : multiplicative_replacement
 def replaceVal(val,nZeros,sumRow,inputeVal):
     if val == 0:
         return inputeVal
