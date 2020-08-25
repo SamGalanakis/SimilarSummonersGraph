@@ -66,7 +66,7 @@ if __name__ == "__main__":
 
 
 
-
+    
     #filter out irrelevant nodes
 
     g.nodes = [x for x in g.nodes if x["id"] in relevantNodes]

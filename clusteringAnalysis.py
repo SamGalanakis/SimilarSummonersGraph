@@ -27,7 +27,7 @@ clrVals = clr(df.values)
 #scale features 
 scaler = StandardScaler()
 scaled_features = scaler.fit_transform(df.values)
-
+    
 
 
 # featureKMeans = FeatureAgglomeration(distance_threshold=0, n_clusters=None)

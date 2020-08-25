@@ -45,7 +45,7 @@ with open('data//lastCollection.csv', mode='w',encoding="utf-8",newline='') as d
     dataCSVWriter = csv.writer(dataCSV, delimiter=',', quotechar='"', quoting=csv.QUOTE_MINIMAL)
     dataCSVWriter.writerow(columnLabels)
 
-
+    
     summoner=summoner_seed
     while True:
         print(summoner.name)

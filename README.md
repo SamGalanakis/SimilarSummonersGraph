@@ -3,12 +3,12 @@
 
 Leverage RiotAPI to visualize champion clusters based on player preferences.
 
+The goal of this project is to explore and visualize the character/champion preferences of league of legends players, create
+a visualization and a recommender system based on most played champs of a player. 
 
+[Go here for the full analysis](https://www.samgalanakis.com/projects/similarSummonersGraph/)
 
-http://www.leg.ufpr.br/lib/exe/fetch.php/pessoais:abtmartins:dealingwithzerosandmissingvalues.pdf
+[Interactive recommender system](https://www.samgalanakis.com/projects/similarSummonersGraph/championRecommender/)
 
-http://scikit-bio.org/docs/0.5.0/generated/generated/skbio.stats.composition.ilr.html#skbio.stats.composition.ilr
+[The full champion network visualization](https://www.samgalanakis.com/projects/similarSummonersGraph/championNetwork/)
 
-
-
-https://mran.microsoft.com/snapshot/2016-11-19/web/packages/propr/vignettes/introduction.html
