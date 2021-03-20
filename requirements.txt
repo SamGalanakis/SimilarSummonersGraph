@@ -20,7 +20,7 @@ importlib-metadata==1.7.0
 ipython==7.17.0
 ipython-genutils==0.2.0
 jedi==0.17.2
-Jinja2==2.11.2
+Jinja2==2.11.3
 joblib @ file:///tmp/build/80754af9/joblib_1594236160679/work
 jsonpickle==1.4.1
 kiwisolver==1.2.0
