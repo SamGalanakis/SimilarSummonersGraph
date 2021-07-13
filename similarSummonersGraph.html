@@ -1,8 +1,5 @@
-{% extends "base.html" %}
-{% load static %}
 
-{% block mainBlock %}
-<link rel="stylesheet" href={% static "css/similarSummonersGraph/similarSummonersGraph.css" %}>
+<link rel="stylesheet" href="similarSummonersGraph.css">
 
 <div class="header">
     <h2>Similar summoners graph</h2>
@@ -27,11 +24,13 @@
                 from any of ~150 champions (characters) and each champion is associated with one or more roles or
                 playstyles.</p>
 
-            <div class="imgContainer summonersRift"><a class="lightboxLink" href={% static 'images\summonersRift.jpeg' %} data-lightbox="summonersRift" data-title="Summoners Rift."> <img src={% static 'images\summonersRift.jpeg' %}
-                    alt="Summoners Rift" > </a>
+            <div class="imgContainer summonersRift">
                 
                 
+               
+                <img src="summonersRift.jpeg" alt="Summoners Rift">
                 
+        
         
                 </div>
                                 
@@ -48,10 +47,9 @@
         </div>
 
         <div class="imgContainer championCollage">
-            <a class="lightboxLink" href={% static 'images\champions.png' %} data-lightbox="champions" data-title="Champions.">
-            <img src={% static 'images\champions.png' %} alt="championsCollage"> </a>
+            
 
-      
+          <img src="champions.png" alt="Champions">
     </div>
 
 
@@ -280,16 +278,14 @@
              play multiple roles.
         </p>
         <div class="imgContainer adcGraph">
-            <a class="lightboxLink" href={% static 'images\ADC.png' %} data-lightbox="ADC" data-title="ADC cluster.">
-            <img src={% static 'images\ADC.png' %} alt="acd_Graph"> </a>
+      
 
-     
+                       <img src="ADC.png" alt="Adc graph">
         </div>
 
         <div class="imgContainer flashyMidTop">
-            <a class="lightboxLink" href={% static 'images\flashyMidTop.png' %} data-lightbox="flashyMidTop" data-title="Flashy mid and top cluster.">
-            <img src={% static 'images\flashyMidTop.png' %} alt="flashyMidTop_Graph"> </a>
-     
+
+              <img src="flashyMidTop.png" alt="flashyMidTop_Graph">
         </div>
 
 
@@ -297,8 +293,9 @@
           I also applied full hierarchical clustering, the dendrogram provides an interesting visualization of the preferences but was not used for the network visualization.
         </p>
         <div class="imgContainer dendrogram">
-            <a class="lightboxLink" href={% static 'images\dendrogramColoredDetailed.svg' %} data-lightbox="champpionDendrogram" data-title="Champion dendrogram">
-            <img src={% static 'images\dendrogramColoredDetailed.svg' %} alt="hierarchicalDendrogram"> </a>
+            
+            
+                     <img src="dendrogramColoredDetailed.svg" alt="hierarchicalDendrogram">
         </div>
         <h3 class="subsection">Rho and Phi correlation metrics</h3>
         <p> Correlation matrices were constructed using both metrics, rho takes values in [-1,1] and can be interpreted as the pearson coefficient, 
@@ -365,7 +362,7 @@
             be scaled by using extensive caching.
         </p>
  
-      <p><a target="_blank" href="{% url 'projects:similarSummonersGraph-championRecommender' %}">Click here to try the recommender!</a></p>
+<!--       <p><a target="_blank" href="{% url 'projects:similarSummonersGraph-championRecommender' %}">Click here to try the recommender!</a></p> -->
         
     
 
@@ -376,5 +373,3 @@
 
 
 
-
-{% endblock mainBlock %}
