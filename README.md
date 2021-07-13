@@ -12,4 +12,4 @@ a visualization and a recommender system based on most played champs of a player
 
 [The full champion network visualization](https://www.samgalanakis.com/projects/similarSummonersGraph/championNetwork/) -->
 
-![Champion netowrk](Graphics/network20k.png)
+![Champion network render](https://samgalanakis.github.io/SimilarSummonersGraph/networkFinalFullPage.html)
