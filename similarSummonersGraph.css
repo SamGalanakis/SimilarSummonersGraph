@@ -1,0 +1,192 @@
+.header{
+  
+
+	background-color:white;
+  
+	height: auto;
+  padding: 1rem;
+
+  margin:0;
+  margin-top: 0;
+  margin:auto;
+  width:95%;
+}
+
+/* modal */
+/* Style the Image Used to Trigger the Modal */
+.imgContainer img {
+  border-radius: 5px;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.imgContainer img:hover {opacity: 0.7;}
+
+/
+/* table css  */
+.td.empty {
+    display: none;
+}
+table.greyGridTable {
+    border: 2px solid white;
+    width: 100%;
+    text-align: center;
+    border-collapse: collapse;
+  }
+  table.greyGridTable td, table.greyGridTable th {
+    border: 1px solid white;
+    padding: 3px 4px;
+  }
+  table.greyGridTable tbody td {
+    font-size: 1rem;
+  }
+  table.greyGridTable td:nth-child(even) {
+    /* background: #EBEBEB; */
+  }
+  table.greyGridTable thead {
+    /* background: #FFFFFF; */
+    border-bottom: 4px solid white;
+  }
+  table.greyGridTable thead th {
+    font-size: 15px;
+    font-weight: bold;
+    color: white;
+    text-align: center;
+    border-left: 2px solid ;
+  }
+  table.greyGridTable thead th:first-child {
+    border-left: none;
+  }
+  
+  table.greyGridTable tfoot {
+    font-size: 1rem;
+    font-weight: bold;
+    color: white;
+    border-top: 4px solid white;
+  }
+  table.greyGridTable tfoot td {
+    font-size: 1rem;
+  }
+  /* end table css */
+
+  .tableWrapper{
+    /* width:100%; */
+    /* margin: auto; */
+    overflow:scroll;
+  }
+ 
+
+  ul,p {
+    padding:0;
+}
+ .content img{
+    
+    width: 80%;
+    height: auto;
+  
+  
+    
+ }
+
+ .mathWrapper {
+  width:100%;
+  padding:auto;
+ }
+ .imgContainer {
+    width:100%;
+    display: flex;
+  align-items: center;
+  justify-content: center;
+   
+    align-items: center;
+ }
+
+.header h2{
+  
+	color: #333745;
+	font-size: 3rem;
+	font-weight:300;
+	text-align: center;
+}
+
+
+.githubDiv {
+    width:70%;
+    border-radius: 10px;
+    text-align: center;
+   
+    margin: auto;
+    margin-top:1rem;
+    background-color: rgba(233,64,41,1);
+  }
+  .header a{
+    color: black;
+    text-decoration: none;
+    margin: auto;
+    text-align: center;
+  }
+
+  .content {
+    
+    display: flex;
+    width:100%;
+    flex-direction: column;
+  }
+  .content a{
+      text-decoration: none;
+      color:skyblue;
+  }
+  .projectSection {
+      display: flex;
+      flex-direction: column;
+      /* width:100%; */
+  }
+
+  .sectionContent {
+    
+    display:flex;
+    flex-direction: column;
+    /* width:90%; */
+   flex-grow: 1;
+   padding-left: 2rem;
+   padding-right: 1.5rem;
+   padding-top:1rem;
+   padding-bottom: 0.5rem;  
+    
+  }
+  .sectionTitle {
+    
+    text-align: left;
+    /* padding-right: 30%; */
+    color:white;
+   
+    max-width: 90%;
+    border-top-left-radius: 0;
+    border-top-right-radius: 0;
+    border-bottom: 1px solid white;
+
+    
+    
+    
+  }
+  .sectionTitle h2{
+      padding:0;
+      margin: 0;
+      margin-top: 1rem;
+      padding-right: 1rem;
+      padding-left:1rem;
+      
+      
+      
+      
+      /* margin-left: 1rem; */
+      
+  }
+
+  @media only screen and (max-width: 768px) {
+    .content img {
+      width:100%;
+    }
+    
+    
+    }
