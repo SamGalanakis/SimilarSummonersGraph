@@ -1,0 +1,380 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block mainBlock %}
+<link rel="stylesheet" href={% static "css/similarSummonersGraph/similarSummonersGraph.css" %}>
+
+<div class="header">
+    <h2>Similar summoners graph</h2>
+    <a target="_blank" href="https://github.com/SamGalanakis/SimilarSummonersGraph">
+        <div class="githubDiv">View on github.</div>
+    </a>
+</div>
+
+
+<div class="content">
+    
+    <div class="projectSection context">
+
+        <div class="sectionTitle">
+            <h2>Required Context</h2>
+        </div>
+        <div class="sectionContent">
+            <p><a target="_blank" href="https://en.wikipedia.org/wiki/League_of_Legends">League of legends</a> is a
+                multiplayer online battle arena
+                game with 100 million + active players (summoners). Every game has two opposing teams of 5 players, each
+                taking a different role. Each player can choose
+                from any of ~150 champions (characters) and each champion is associated with one or more roles or
+                playstyles.</p>
+
+            <div class="imgContainer summonersRift"><a class="lightboxLink" href={% static 'images\summonersRift.jpeg' %} data-lightbox="summonersRift" data-title="Summoners Rift."> <img src={% static 'images\summonersRift.jpeg' %}
+                    alt="Summoners Rift" > </a>
+                
+                
+                
+        
+                </div>
+                                
+                
+                
+                
+                
+                
+                
+                
+                
+                
+                </div>
+        </div>
+
+        <div class="imgContainer championCollage">
+            <a class="lightboxLink" href={% static 'images\champions.png' %} data-lightbox="champions" data-title="Champions.">
+            <img src={% static 'images\champions.png' %} alt="championsCollage"> </a>
+
+      
+    </div>
+
+
+
+
+    <div class="projectSection intro">
+
+        <div class="sectionTitle">
+            <h2> Goal</h2>
+        </div>
+        <div class="sectionContent">
+            <p>The goal of this project is to explore and visualize the character/champion preferences of league of
+                legend
+                players, create
+                a visualization and a recommender system based on most played champs of a player. </p>
+        </div>
+
+
+    </div>
+
+
+    <div class="projectSection dataCollection">
+
+        <div class="sectionTitle">
+            <h2> Data Collection</h2>
+        </div>
+        <div class="sectionContent">
+            <p>The Riot games api gives access to pretty much everything needed to get player preferences. Ideally, one
+                would get the total number
+                of games played for a given player and then partition them according to the champion played and use this
+                as
+                the dataset. Unfortunately,
+                given the rate limit on the api on a free api key it would be extremely slow to take this approach as it
+                would require 100+ calls per player
+                to get at least a representative look at the champions played. </p>
+
+            <p> In order to get around this, the
+                <a target="_blank" href="https://lol-archive.gamepedia.com/Champion_Mastery"></a>champion masteries
+                variable
+                was used. Every time a player plays a game
+                with a champion the accumulate a small amount of mastery points for that specific champion based on how
+                well
+                they did. So the total mastery
+                points can be used as an estimator of the games played although it is also reflective of performance.
+                Champion mastery information for a given
+                player can easily be accesed through a single cass via the Riot games api so it is way more practical
+                given
+                the rate limitting.
+            </p>
+            <p>
+                Players were found by using my own account as a seed and then crawling through the games in match
+                history.
+                Game types, player ranks
+                were not taken into account since it is assumed that those shouldn't impact the connection between
+                played
+                champions and actual preferences.
+                This may not be the case at the very highest tier of ranked gameplay where character preferences are
+                dictated more or less by the meta
+                but those players/games if included at all make up an insignificant percentage.
+            </p>
+            <p>
+                In total ~70k players mastery points were collected, the head of the resulting dataframe for the first
+                10
+                columns is shown below.
+            </p>
+            <div class="tableWrapper">
+
+
+
+
+                <table border="1" class="greyGridTable  dataframe">
+                    <thead>
+                        <tr style="text-align: right;">
+                            <th></th>
+                            <th>summoner</th>
+                            <th>Aatrox</th>
+                            <th>Ahri</th>
+                            <th>Akali</th>
+                            <th>Alistar</th>
+                            <th>Amumu</th>
+                            <th>Anivia</th>
+                            <th>Annie</th>
+                            <th>Aphelios</th>
+                            <th>Ashe</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <th>0</th>
+                            <td>Mandelion</td>
+                            <td>3374</td>
+                            <td>5502</td>
+                            <td>4743</td>
+                            <td>6833</td>
+                            <td>12782</td>
+                            <td>4174</td>
+                            <td>12382</td>
+                            <td>855</td>
+                            <td>2446</td>
+                        </tr>
+                        <tr>
+                            <th>1</th>
+                            <td>NostàroiCaphalor</td>
+                            <td>5746</td>
+                            <td>45956</td>
+                            <td>249</td>
+                            <td>17628</td>
+                            <td>11973</td>
+                            <td>2221</td>
+                            <td>59095</td>
+                            <td>0</td>
+                            <td>3552</td>
+                        </tr>
+                        <tr>
+                            <th>2</th>
+                            <td>RiftLurker</td>
+                            <td>4146</td>
+                            <td>95507</td>
+                            <td>19794</td>
+                            <td>24849</td>
+                            <td>13790</td>
+                            <td>48370</td>
+                            <td>15485</td>
+                            <td>7531</td>
+                            <td>52714</td>
+                        </tr>
+                        <tr>
+                            <th>3</th>
+                            <td>SimonDeen360</td>
+                            <td>15075</td>
+                            <td>13473</td>
+                            <td>11938</td>
+                            <td>71794</td>
+                            <td>7453</td>
+                            <td>9348</td>
+                            <td>7369</td>
+                            <td>4088</td>
+                            <td>59983</td>
+                        </tr>
+                        <tr>
+                            <th>4</th>
+                            <td>Lateox</td>
+                            <td>3025</td>
+                            <td>21071</td>
+                            <td>3993</td>
+                            <td>5191</td>
+                            <td>1272</td>
+                            <td>4086</td>
+                            <td>3561</td>
+                            <td>22132</td>
+                            <td>22324</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+
+        </div>
+    </div>
+
+
+    <div class="projectSection datPreprocessing">
+
+        <div class="sectionTitle">
+            <h2>Data preprocessing</h2>
+        </div>
+        <div class="sectionContent">
+            <p>
+           The first step was to remove all rows of players with very few low mastery points, as such players would
+                show
+                misleading
+                correlations based on very few actual games playes. Specifically players with no champion with at least lv 5
+                mastery (21600)
+                points were filtered out, a total of about ~5k players. </p>
+
+           <p> Since we are only interested in player preferences, information about total mastery points is not
+                needed, only the composition of the total is relevant. To remove this irrelevant information, each row was divided by its max resulting
+                in a purely compositional dataset.</p>
+
+            <p> Before continuing the analysis, zero values needed to be dealt with as most approaches to compositional data analysis require fractions
+                which can of course not be taken with 0 values. There are various approaches to replacing these zeros, after reading this
+                <a target="_blank" href="http://www.leg.ufpr.br/lib/exe/fetch.php/pessoais:abtmartins:dealingwithzerosandmissingvalues.pdf">paper</a> on
+                the topic I chose the multiplicative replacement approach with replacement value the minimum points gained from a single game.
+            </p>
+            <div class="mathWrapper">$$
+                r_{j}=\left\{\begin{array}{ll}
+                \delta_{j}, & \text { if } x_{j}=0 \\
+                \left(1-\frac{\Sigma_{k \mid x_{k}=0 \delta_{k}}}{c}\right) x_{j}, & \text { if } x_{j}>0
+                \end{array}\right.
+                $$</div>
+            
+                <p> Due to the inherently relative nature of 
+            <a target="_blank" href="https://en.wikipedia.org/wiki/Compositional_data#:~:text=In%20statistics%2C%20compositional%20data%20are,thought%20of%20as%20compositional%20data.">compositional data</a>
+            classical statistical techniques can't be directly applied without risk of misleading results. After some research I decided to use rho
+            and phi metrics approach for compositional data in place of normal correlation analysis, as detailed <a target="_blank" href="https://mran.microsoft.com/snapshot/2016-11-19/web/packages/propr/vignettes/introduction.html">here</a>. This approach requires
+            the data to first be transformed using a centered log-ratio transformation (clr):
+        </p>
+            
+           <div class="mathWrapper clr">  $$clr(x) = [ log\frac{x_1}{g(x)},log\frac{x_2}{g(x)} \cdots log\frac{x_n}{g(x)}]$$</div>
+            
+            <p>The python libray <a href="http://scikit-bio.org/docs/0.5.0/generated/skbio.stats.composition.html#module-skbio.stats.composition" target="_blank">scikit-bio</a>
+            has many useful tools for compositional data including multiplicative replacement and clr.</p> 
+        </div>
+    </div>
+
+
+
+        
+    <div class="projectSection analysis">
+
+
+
+        
+        <div class="sectionTitle">
+            <h2>Analysis</h2>
+        </div>
+
+       
+        <div class="sectionContent">
+            <h3 class="subsection">Unsupervised learning</h3>
+        <p>After preprocessing I tried using unsupervised learning techniques to cluster the data, in hopes of obtaining semantically recognizable
+            clusters of champions. K-means feature agglomeration (essentialy kmeans on the transposed data) gave groupings that loosely relate to the 5 roles
+            in the game, for example the following pictures show two clusters, the first containing only marksman champions so being quite accurate and
+             the second containing a mix of flashy solo lane (mid,top) champs  so not strictly a role but pertaining to a common player type. An exact
+             match between clusters and roles would have been unlikely given that many champions are played in multiple roles and of course players
+             play multiple roles.
+        </p>
+        <div class="imgContainer adcGraph">
+            <a class="lightboxLink" href={% static 'images\ADC.png' %} data-lightbox="ADC" data-title="ADC cluster.">
+            <img src={% static 'images\ADC.png' %} alt="acd_Graph"> </a>
+
+     
+        </div>
+
+        <div class="imgContainer flashyMidTop">
+            <a class="lightboxLink" href={% static 'images\flashyMidTop.png' %} data-lightbox="flashyMidTop" data-title="Flashy mid and top cluster.">
+            <img src={% static 'images\flashyMidTop.png' %} alt="flashyMidTop_Graph"> </a>
+     
+        </div>
+
+
+        <p>
+          I also applied full hierarchical clustering, the dendrogram provides an interesting visualization of the preferences but was not used for the network visualization.
+        </p>
+        <div class="imgContainer dendrogram">
+            <a class="lightboxLink" href={% static 'images\dendrogramColoredDetailed.svg' %} data-lightbox="champpionDendrogram" data-title="Champion dendrogram">
+            <img src={% static 'images\dendrogramColoredDetailed.svg' %} alt="hierarchicalDendrogram"> </a>
+        </div>
+        <h3 class="subsection">Rho and Phi correlation metrics</h3>
+        <p> Correlation matrices were constructed using both metrics, rho takes values in [-1,1] and can be interpreted as the pearson coefficient, 
+            the phi metric takes values in [0,+&#8734] with larger values incicating lower correlation.  </p>
+
+            
+       
+        <div class="mathWrapper phiRho">$$
+            \begin{array}{c}
+            \phi\left(A_{i}, A_{j}\right)=\frac{\operatorname{var}\left(A_{i}-A_{j}\right)}{\operatorname{var}\left(A_{i}\right)} \\
+            \rho\left(A_{i}, A_{j}\right)=1-\frac{\operatorname{var}\left(A_{i}-A_{j}\right)}{\operatorname{var}\left(A_{i}\right)+\operatorname{var}\left(A_{j}\right)}
+            \end{array}
+            $$</div>
+        </div>
+
+
+    </div>
+
+    <div class="projectSection visualization">
+
+
+
+        
+        <div class="sectionTitle">
+            <h2>Network visualization</h2>
+        </div>
+
+       
+        <div class="sectionContent">
+         
+        <p>Now that we have both the clusters and the correlation matrices we can create the champion network. Each node represents a champion and
+            is scaled by the total sum of the column in the compositional datset, essentially the popularity of a given champion. Each node is then connected
+            to the 6 nodes it is most highl correlated with based on one of the correlation matrices. The number 6 was chosen through trial and error as larger
+            values seemed to produce overly connected networks since correlations tended to drop off. The width of these connections are also scaled based 
+            on the correlation, forming a weighted graph. Finally, the nodes are colored according to the clusters produced through K-means.
+        </p>
+        <p>The network was constructed using networkx and then imported into pyvis for visualization.</p>
+      <h3 class="subsection">The champion network</h3>
+      <p><a target="_blank" href="{% url 'projects:similarSummonersGraph-championNetwork' %}">Click here for full page view</a></p>
+        <div class="networkWrapper"> {% include 'projects/similarSummonersGraph/networkFinal.html' %}</div>
+    </div>
+
+            
+       
+
+    <div class="projectSection championRecommender">
+
+
+
+        
+        <div class="sectionTitle">
+            <h2>Champion recommender</h2>
+        </div>
+
+       
+        <div class="sectionContent">
+         
+        <p>Given this network there are various ways to create a recommender system. One reasonable way is to use the weighted path length
+            between nodes. Specifically, for a given set of input champions, the average shorted weighted path length is calculated for each champion
+            not in the input set. The champion with the smallest such distance is then the recommendation for the givne input. So the reccomendation 
+            is essentially something like a "graph center" of the given nodes.
+        </p>
+        <p>The distance is calculated using the dijkstra algorithm implemented in networkx and is suprisingly fast although such an approach could likely only
+            be scaled by using extensive caching.
+        </p>
+ 
+      <p><a target="_blank" href="{% url 'projects:similarSummonersGraph-championRecommender' %}">Click here to try the recommender!</a></p>
+        
+    
+
+
+
+
+</div>
+
+
+
+
+{% endblock mainBlock %}
